@@ -5,11 +5,11 @@ import codecs
 import imagefuncts as imf
 
 #get input strings
-i2u = input("Select an image to edit!")
-f2u = input("Select a filter to use!")
+i2u = '38.jpg'
+f2u = 'edgedetect.txt'
 
-datapath = ("/Users/julianrothenbuchner/Documents/Python/data")
-file2open = datapath + "/" + f2u
+
+file2open =  f2u
 
 with codecs.open(file2open, "r", encoding = "ascii", errors = "ignore") as fltrdoc:
     fltr = fltrdoc.readlines()
