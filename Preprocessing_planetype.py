@@ -31,7 +31,7 @@ def convolutor(i2u):
         mtrx.append(res)
 
     krnl = np.array(mtrx)
-    print(krnl)
+    #print(krnl)
     krnlsize = krnl.shape[0]
     pd = 0
 
@@ -70,9 +70,17 @@ def convolutor(i2u):
 
     imgout = pygame.pixelcopy.make_surface(out)
 
-    pygame.image.save(nimgout, "New " + i2u[:-4] + ".jpeg")
+    
     return imgout
 
+vector = pygame.PixelArray(convolutor('1.jpg'))
 
+for j in range(len(vector)):
+    for i in range(len(vector[j])):
+        if vector[j][i] == 0:
+            continue
+        else:
+            vector[j][i] = 1
+print(vector)
 
 
