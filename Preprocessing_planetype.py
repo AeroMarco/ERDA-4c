@@ -73,14 +73,20 @@ def convolutor(i2u):
     
     return imgout
 
-vector = pygame.PixelArray(convolutor('1.jpg'))
+matrix = pygame.PixelArray(convolutor('1.jpg'))
 
-for j in range(len(vector)):
-    for i in range(len(vector[j])):
-        if vector[j][i] == 0:
+for j in range(len(matrix)):
+    for i in range(len(matrix[j])):
+        if matrix[j][i] == 0:
             continue
         else:
-            vector[j][i] = 1
-print(vector)
+            matrix[j][i] = 1
 
 
+vector = []
+
+for j in range(len(matrix)):
+    for i in range(len(matrix[j])):
+        vector.append(matrix[j][i])
+
+print(len(vector))
