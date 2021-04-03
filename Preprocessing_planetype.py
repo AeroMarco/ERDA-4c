@@ -13,7 +13,7 @@ import imagefuncts as imf
 #get input strings
     
     
-def convolutor(i2u):
+def convolutor(i2u): #this is a function to detect the edges of an object in a picture. It returns a screen of a black and white image of the outline of the plane.
     f2u = 'edgedetect.txt'
     file2open =  f2u
 
@@ -23,7 +23,7 @@ def convolutor(i2u):
     strows = []
     mtrx = []
 
-#use lIst COmprEhenSioN to get the matrix of the values
+
     for i in range(len(fltr)):
         strow = fltr[i]
     #strow = strow[:-1]
@@ -72,21 +72,43 @@ def convolutor(i2u):
 
     
     return imgout
+def preprocessing_type():  #this function does all the preprocessing for plane type recognition. It retuns a list of vecotors corresponding to the pictures in order form 1 to 100.
+    n = 100
+    n_pictures = 3 #number of pictures in dataset
+    lengthlist = []
+    vectorlist = []
+    while n <= n_pictures: #for every picture
+        matrix = pygame.PixelArray(convolutor(str(n)+'.jpg')) #get matrix of convoluted pixels in picture
+        
+        for j in range(len(matrix)): #for every pixel: make all non-zero values 1 and leave the rest 0
+            for i in range(len(matrix[j])):
+                if matrix[j][i] == 0:
+                    continue
+                else:
+                    matrix[j][i] = 1
 
-matrix = pygame.PixelArray(convolutor('1.jpg'))
 
-for j in range(len(matrix)):
-    for i in range(len(matrix[j])):
-        if matrix[j][i] == 0:
-            continue
-        else:
-            matrix[j][i] = 1
+        vector = []
+        
+        for j in range(len(matrix)): #rewrite matrix to a vector for use in the ANN
+            for i in range(len(matrix[j])):
+                vector.append(matrix[j][i])
+
+        
+        vectorlist.append(vector) #make a list of all vectors
+        lengthlist.append(len(vector)) #make a list of the vector lenghts
+        n += 1
+
+    max_len = max(lengthlist) #what is the length of the longest vector?
+    #print(lengthlist)
+    #print(max_len)
+
+    for a in range(len(vectorlist)): #make all vecotrs equal lenght by adding 0's to every vector until it is the lenght of the longest vector.
+        while len(vectorlist[a]) < max_len:
+            vectorlist[a].append(0)
+        lengthlist[a] = len(vectorlist[a])
+    #print(lengthlist)
+    return vectorlist
 
 
-vector = []
-
-for j in range(len(matrix)):
-    for i in range(len(matrix[j])):
-        vector.append(matrix[j][i])
-
-print(len(vector))
+    
