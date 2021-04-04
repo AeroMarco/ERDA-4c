@@ -17,26 +17,33 @@ def preprocessing_logos():  #this function does all the preprocessing for plane 
     #this program will find the top 2000 colors in rgb format
 
     n = 1
-    n_pictures = 10 #number of pictures in dataset
+    n_pictures = 100 #number of pictures in dataset
     lengthlist = []
     vectorlist = []
     while n <= n_pictures: #for every picture
 
         lengthlist = []
         img = Image.open(str(n)+'.jpg')
-        new_img = img.resize((400,300))
+        
         im_rgb = img.convert('RGB')
-        colors = im_rgb.getcolors(maxcolors=200000)  
-        colors = sorted(colors, key = lambda x:-x[0])
-        for a in range (2000):
-            col = matplotlib.colors.to_hex([ colors[a][1][0]/255, colors[a][1][1]/255, colors[a][1][2]/255 ])
-            lengthlist.append(col)
-        #print(lengthlist)
-    
+        colors = im_rgb.getcolors(maxcolors=200000)
+        print(colors)  
+        if (n not in  [35,61]):
+            colors = sorted(colors, key = lambda x:-x[0])
+        
+            for a in range (min(2000, len (colors))):
+                col = matplotlib.colors.to_hex([ colors[a][1][0]/255, colors[a][1][1]/255, colors[a][1][2]/255 ])
+                lengthlist.append(col)
+            if len(colors)< 2000:
+                for x in range (2000 - len(colors)):
+                    lengthlist.append('#ffffff')
+        
+        print(n)
 
         n = n +1
-    vectorlist.append(lengthlist)
-
+        vectorlist.append(lengthlist)
+    print(len(vectorlist))
+    print(vectorlist[34])
 
     return vectorlist
 
@@ -48,6 +55,7 @@ def Write_up(vect):
         for y in range(len(vect[x])):
             str1 =  str1 + str(vect[x][y]) + ' '
         f.write("\r\n" + str1)
+        print(x)
     f.close()
     return 
 

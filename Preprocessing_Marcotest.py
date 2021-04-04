@@ -7,7 +7,7 @@ from PIL import Image
 def preprocessing_type():  #this function does all the preprocessing for plane type recognition. It retuns a list of vecotors corresponding to the pictures in order form 1 to 100.
     
     n = 1
-    n_pictures = 10 #number of pictures in dataset
+    n_pictures = 100 #number of pictures in dataset
     lengthlist = []
     vectorlist = []
     while n <= n_pictures: #for every picture
@@ -22,7 +22,7 @@ def preprocessing_type():  #this function does all the preprocessing for plane t
         arra = np.array(new_img)
         #print(len(arra))
         #print(len(arra[0]))
-        print(len(arra[0][0]))
+        print(n)
         lengthlist = []
         for x in range (len(arra)):
             for y in range (len(arra[0])):
@@ -46,6 +46,7 @@ def Write_up(vect):
         for y in range(len(vect[x])):
             str1 =  str1 + str(vect[x][y]) + ' '
         f.write("\r\n" + str1)
+        print(x)
     f.close()
     return 
 Write_up(preprocessing_type())
