@@ -2,6 +2,9 @@ import pygame
 import numpy as np
 import codecs
 import imagefuncts as imf
+import math
+from PIL import Image
+
 
 #get input strings
     
@@ -62,7 +65,9 @@ def preprocessing_type():  #this function does all the preprocessing for plane t
     vectorlist = []
 
     while n <= n_pictures: #for every picture
-        print("hola")
+
+        
+        
         matrix = pygame.PixelArray(convolutor(str(n)+'.jpg')) #get matrix of convoluted pixels in picture
         
         for j in range(len(matrix)): #for every pixel: make all non-zero values 1 and leave the rest 0
@@ -84,14 +89,27 @@ def preprocessing_type():  #this function does all the preprocessing for plane t
         vectorlist.append(vector) #make a list of all vectors
         lengthlist.append(len(vector)) #make a list of the vector lenghts
         n += 1
-
+    print(lengthlist)
     max_len = max(lengthlist) #what is the length of the longest vector?
     #print(lengthlist)
     #print(max_len)
 
-    for a in range(len(vectorlist)): #make all vecotrs equal lenght by adding 0's to every vector until it is the lenght of the longest vector.
+    for a in range(len(vectorlist)): #make all vectors equal length by adding 0's to every vector until it is the length of the longest vector.
         while len(vectorlist[a]) < max_len:
             vectorlist[a].append(0)
         lengthlist[a] = len(vectorlist[a])
     #print(lengthlist)
+
+    
     return vectorlist
+
+def Write_up(vect):
+    f= open("PreplanningPlanetype.txt","w+")
+    for x in range(len(vect)):    
+        str1 = ''
+        for y in range(len(vect[x])):
+            str1 =  str1 + str(vect[x][y]) + ' '
+        f.write("\r\n" + str1)
+    f.close()
+    return 
+Write_up(preprocessing_type())
