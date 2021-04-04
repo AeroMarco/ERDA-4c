@@ -27,8 +27,39 @@ def preprocessing_logos():  #this function does all the preprocessing for plane 
         
         im_rgb = img.convert('RGB')
         colors = im_rgb.getcolors(maxcolors=200000)
-        print(colors)  
-        if (n not in  [35,61]):
+          
+        if (n not in  [35,61]): # These 2 images show up as not having any colors, as in the value of the color just comes up as none, but they seem to still wotrk with other processes so ive kept them in just in case
+            tots = list(img.getdata())
+            pixmax = len(tots)
+            a = []
+            b = []
+            c = []
+            used = []
+            for x in range (13):
+                a.append(math.floor((x*255)/13))
+                b.append(math.floor((x*255)/13))
+                c.append(math.floor((x*255)/13))
+            for x in (a):
+                for y in (b):
+                    for z in (c):
+                        falsetot = 0
+                        for m in range (len(colors)):
+                            if (colors[m][1][0] > x) and\
+                                 (colors[m][1][0] < (x+13)) and\
+                                     (colors[m][1][1] > y) and\
+                                         (colors[m][1][1] < (y+13)) and\
+                                             (colors[m][1][2] > z) and\
+                                                 (colors[m][1][2] < (z+13)) and\
+                                                     (m not in used):
+                                                    falsetot = falsetot + (colors[m][0]/pixmax)
+                                                    used.append(m)
+                        lengthlist.append(falsetot)
+
+
+
+            
+            
+            '''
             colors = sorted(colors, key = lambda x:-x[0])
         
             for a in range (min(2000, len (colors))):
@@ -37,6 +68,7 @@ def preprocessing_logos():  #this function does all the preprocessing for plane 
             if len(colors)< 2000:
                 for x in range (2000 - len(colors)):
                     lengthlist.append('#ffffff')
+            '''
         
         print(n)
 
