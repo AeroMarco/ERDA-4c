@@ -12,39 +12,106 @@ print("Teach me something new (train an ANN and export weights) [1]")
 print("Classify an image [2]")
 print("Test my capabilities [3]")
 
-iterationnumber = 5
+iterationnumber = 1000
+learning_rate = 0.3
 
 opt = int(input())
 
+weights_hidden = 0
+
+def training(iterationnumber,learning_rate):
+        print("Please enter the training input data file below:")
+        #input_filename = str(input())
+        input_filename = "PreplanningPlanetype_2_copy.txt"
+        learning_input = np.genfromtxt(input_filename,dtype = float)
+
+        print(learning_input)
+        
+        if input_filename == "PreplanningPlanetype_2_copy.txt":
+            learning_input = np.reshape(learning_input,(2686,100))
+
+        print("Please enter the training output data file below:")
+        #output_filename = str(input())
+        output_filename = "Solutions_planetype.txt"
+        learning_output = np.genfromtxt(output_filename, dtype = float, delimiter = " ")
+        
+        n = np.max(learning_input)
+        newlearningoutput = np.zeros((int(max(learning_output)),(len(learning_output))))
+        for i in range(len(learning_output)):
+            newlearningoutput[int(learning_output[i]-1),i] = 1
+        
+        learning_output = newlearningoutput
+
+        print("Do you want me to give you updates? [y/n]")
+        #wordy = str(input())
+        wordy = "y"
+        if wordy == "y":
+            verbose = True
+            print(np.shape(learning_input),np.shape(learning_output))
+        
+        weights_hidden, bias_hidden, weights_output, bias_output, total_error_series = ann.learn_gradient(learning_input,learning_output,iterationnumber,verbose,learning_rate)
+
+        plt.plot(np.arange(iterationnumber+1),total_error_series)
+        plt.yscale("log")
+        plt.ylabel("Sum-Squared Error")
+        plt.xlabel("Number of Iterations")
+        plt.title("Sum-Squared Error of ANN while Learning")
+        plt.show()
+
+        return  weights_hidden, bias_hidden, weights_output, bias_output
+    
+
 if opt == 1:
-    print("Please enter the training input data file below:")
-    input_filename = str(input())
-    learning_input = np.genfromtxt(input_filename,dtype = float,delimiter = ",")
+    weights_hidden, bias_hidden, weights_output, bias_output = training(iterationnumber,learning_rate)
+
+opt = int(input("What do you want to do now? 1, 2 or 3"))
+
+if opt == 3:
+    print("Please enter the testing input data file below:")
+    #input_filename = str(input())
+    input_filename = "PreplanningPlanetype_2_copy.txt"
+    testing_input = np.genfromtxt(input_filename,dtype = float)
+
+    print(testing_input)
+    
+    if input_filename == "PreplanningPlanetype_2_copy.txt":
+        testing_input = np.reshape(testing_input,(2686,100))
 
     print("Please enter the training output data file below:")
-    output_filename = str(input())
-    learning_output = np.genfromtxt(output_filename, dtype = float, delimiter = ",")
+    #output_filename = str(input())
+    output_filename = "Solutions_planetype.txt"
+    testing_output = np.genfromtxt(output_filename, dtype = float, delimiter = " ")
+    
+    n = np.max(testing_input)
+    newtestingoutput = np.zeros((int(max(testing_output)),(len(testing_output))))
+    for i in range(len(testing_output)):
+        newtestingoutput[int(testing_output[i]-1),i] = 1
+    
+    testing_output = newtestingoutput
 
     print("Do you want me to give you updates? [y/n]")
-    wordy = str(input())
+    #wordy = str(input())
+    wordy = "y"
     if wordy == "y":
         verbose = True
-    
-    weights_hidden, bias_hidden, weights_output, bias_output, total_error_series = ann.learn_gradient(learning_input,learning_output,iterationnumber,verbose)
-    
-    plt.plot(total_error_series,iterationnumber)
+        print(np.shape(testing_input),np.shape(testing_output))
+
+    avgaccuracy, seriesaccuracy = ann.test(testing_input,testing_output,weights_hidden,weights_output,bias_hidden,bias_output)
+    print(seriesaccuracy)
+    print(avgaccuracy)
+
+    plt.plot(seriesaccuracy)
     plt.show()
+    
+    
 
-    print("Please name my new skill:")
-    export_file_name = str(input())
+    
 
-    hidden_weights_export = open(export_file_name+"_hidden_weights.txt", "w")
-    hidden_weights_export.truncate(0)
 
-    for row in weights_hidden:
-        np.savetxt(weights_hidden, row)
 
-    hidden_weights_export.close()
 
+        
+
+    
 
 
