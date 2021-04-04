@@ -16,9 +16,7 @@ def convolutor(i2u): #this is a function to detect the edges of an object in a p
     with codecs.open(file2open, "r", encoding = "ascii", errors = "ignore") as fltrdoc:
         fltr = fltrdoc.readlines()
 
-    strows = []
     mtrx = []
-
 
     for i in range(len(fltr)):
         strow = fltr[i]
@@ -44,36 +42,28 @@ def convolutor(i2u): #this is a function to detect the edges of an object in a p
         imgb = imf.padding(imgb)
         pd += 1
 
-
-
     outr = imf.convolve(imgr,krnl,pd,iH,iW)
-
-
 
     outg = imf.convolve(imgg,krnl,pd,iH,iW)
 
-
-
     outb = imf.convolve(imgb,krnl,pd,iH,iW)
-
-
 
     out = np.zeros((iH,iW,3),dtype=int)
     out[:,:,0] = outr
     out[:,:,1] = outg
     out[:,:,2] = outb
 
-
     imgout = pygame.pixelcopy.make_surface(out)
 
     
     return imgout
-def preprocessing_type():  #this function does all the preprocessing for plane type recognition. It retuns a list of vecotors corresponding to the pictures in order form 1 to 100.
     
+def preprocessing_type():  #this function does all the preprocessing for plane type recognition. It retuns a list of vecotors corresponding to the pictures in order form 1 to 100.
     n = 1
-    n_pictures = 1 #number of pictures in dataset
+    n_pictures = 100 #number of pictures in dataset
     lengthlist = []
     vectorlist = []
+
     while n <= n_pictures: #for every picture
 
         
@@ -87,6 +77,7 @@ def preprocessing_type():  #this function does all the preprocessing for plane t
                 else:
                     matrix[j][i] = 1
 
+        print(matrix) 
 
         vector = []
         
@@ -111,9 +102,6 @@ def preprocessing_type():  #this function does all the preprocessing for plane t
 
     
     return vectorlist
-
-
-
 
 def Write_up(vect):
     f= open("PreplanningPlanetype.txt","w+")
